@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./Recursos/css/style.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="main">  	
+		<input type="checkbox" id="chk" aria-hidden="true">
+		<div class="signup">
+			<form>
+				<label for="chk" aria-hidden="true" class="register">REGISTRO</label>
+				<input type="text" name="usuario"  id="usuario" placeholder="Usuario" required>
+				<input type="email" name="email"  id="email" placeholder="E-Mail" required>
+                <input type="tel" name="telefono"  id="telefono" placeholder="Telefono" required oninput="verificarLongitud(event)">
+				<div class="password-container">
+					<input type="password" name="contrasena" id="contrasena" placeholder="Contraseña" required>
+					<input type="password" name="rcontrasena" id="rcontrasena" placeholder="Repita su contraseña" required>
+					<span class="toggle-password" onclick="togglePasswordVisibility()"></span>
+				</div>
+				<button type="submit" id="btnRegister">Registrarse</button>
+			</form>
+		</div>
+
+		<div class="login">
+			<form method="GET" action="./Paginas/index.html">
+				<label for="chk" aria-hidden="true">INGRESO</label>
+				<input type="text" name="usuario" id="usuario" placeholder="Usuario" required>
+				<input type="password" name="contrasena" id="contrasena" placeholder="Contraseña" required>
+				<button id="btnLogin" type="submit">Ingresar</button>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
