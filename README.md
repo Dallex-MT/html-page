@@ -77,7 +77,7 @@ html-page/
 
 1. Clona este repositorio en tu máquina local:
    ```bash
-   git clone https://github.com/usuario/html-page.git
+   git clone https://github.com/Dallex-MT/html-page.git
    ```
 
 2. Navega al directorio del proyecto:
